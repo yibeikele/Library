@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.southwind.repository.BookAdminRepository">
+    <select id="login" parameterType="java.lang.String" resultType="com.southwind.entity.BookAdmin">
+        select * from bookadmin where username = #{param1} and password = #{param2}
+    </select>
+
+    <update id="agreeBorrow" parameterType="java.lang.Integer">
+        update borrow set state = 1,adminid = #{param2} where id = #{param1}
+    </update>
+
+    <select id="reader_findAll" parameterType="java.lang.Integer" resultType="com.southwind.entity.Reader">
+        select id,username,name,tel,cardId,gender from  reader limit #{param1},#{param2}
+    </select>
+
+    <select id="reader_findCount" resultType="java.lang.Integer">
+        select count(*) from reader
+    </select>
+
+    <update id="disagreeBorrow" parameterType="java.lang.Integer">
+        update borrow set  state = 2 , adminid= #{param2} where id = #{param1} and readerid = #{param3}
+    </update>
+
+    <select id="returnBook" parameterType="java.lang.Integer" resultType="com.southwind.entity.Borrow">
+         select borrow.id as id,book.name as bookName,book.id as bookId,book.author, book.price, reader.id as cardId, reader.name as readerName,reader.tel, borrow.borrowtime as borrowTime,borrow.returntime as returnTime,borrow.state from book,borrow,reader where book.id = borrow.bookid and borrow.readerid = reader.id and state = 1 limit #{param1},#{param2}
+    </select>
+
+    <select id="returnBookCount" resultType="java.lang.Integer">
+        select count(*) from borrow where state = 1
+    </select>
+
+    <insert id="addReader" parameterType="com.southwind.entity.Reader">
+        insert into reader(username,password,name,tel,cardid,gender) values (#{username},#{password},#{name},#{tel},#{cardid},#{gender})
+    </insert>
+
+    <select id="getName" resultType="java.lang.String">
+        select name from borrow ,book where book.id = borrow.bookid and state in (1,3) group by borrow.bookid
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(borrow.bookid) from borrow ,book where book.id = borrow.bookid and state in (1,3) group by borrow.bookid
+    </select>
+
+    <select id="getValue" resultType="com.southwind.entity.PieData">
+        select name,count(borrow.bookid) as value from borrow ,book where book.id = borrow.bookid and state in (1,3) group by borrow.bookid
+    </select>
+
+    <select id="bookFindAll" resultType="com.southwind.entity.Book">
+        select * from book
+    </select>
+</mapper>

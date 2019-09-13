@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.southwind.repository.BookRepository">
+    <select id="findAll" resultType="com.southwind.entity.Book">
+        select * from book where abled=1 limit  #{param1},#{param2}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from book where abled=1
+    </select>
+
+    <select id="bookCaseFindAll" resultType="com.southwind.entity.BookCase">
+        select * from bookcase
+    </select>
+
+    <insert id="addBook" parameterType="com.southwind.entity.Book" >
+        insert into book (name,author,publish,pages,price,bookcaseid,abled) values (#{name},#{author},#{publish},#{pages},#{price},#{bookcaseid},1)
+    </insert>
+
+    <insert id="Borrow">
+        insert into borrow(bookid,readerid,borrowtime,returntime,state) values (#{param1},#{param2},#{param3},#{param4},#{param5})
+    </insert>
+
+    <delete id="bookDelete" parameterType="java.lang.Integer">
+        delete from book where id = #{param1}
+    </delete>
+
+    <select id="bookFind" parameterType="java.lang.Integer" resultType="com.southwind.entity.Book">
+        select * from book where id=#{param1}
+    </select>
+
+</mapper>

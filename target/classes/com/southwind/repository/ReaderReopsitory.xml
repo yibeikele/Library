@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.southwind.repository.ReaderRepository">
+    <select id="save" parameterType="java.lang.String" resultType="Reader">
+        select *  from reader where username = #{param1} and password = #{param2}
+    </select>
+
+    <select id="reader_borrow_findAll" parameterType="java.lang.Integer" resultType="com.southwind.entity.Borrow">
+        select borrow.id as id,book.name as bookName,book.id as bookId,book.author, book.price, reader.id as cardId, reader.name as readerName,reader.tel, borrow.borrowtime as borrowTime,borrow.returntime as returnTime,borrow.state from book,borrow,reader where book.id = borrow.bookid and borrow.readerid = reader.id and readerid  = #{param1} limit #{param2},#{param3}
+    </select>
+
+    <select id="reader_borrow_count"  parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from borrow where readerid = #{param1}
+    </select>
+
+    <select id="reader_borrow_all" resultType="java.lang.Integer">
+        select count(*) from borrow where state=0
+    </select>
+
+    <select id="admin_borrow_finaAll" parameterType="java.lang.Integer" resultType="com.southwind.entity.Borrow">
+         select borrow.id as id,book.name as bookName,book.id as bookId,book.author, book.price, reader.id as cardId, reader.name as readerName,reader.tel, borrow.borrowtime as borrowTime,borrow.returntime as returnTime,borrow.state from book,borrow,reader where book.id = borrow.bookid and borrow.readerid = reader.id and state = 0 limit #{param1},#{param2}
+    </select>
+
+    <select id="reader_findAll" parameterType="java.lang.Integer" resultType="com.southwind.entity.Borrow">
+        select borrow.id as id,book.name as bookName,book.id as bookId,book.author, book.price, reader.id as cardId, reader.name as readerName,reader.tel, borrow.borrowtime as borrowTime,borrow.returntime as returnTime,borrow.state from book,borrow,reader where book.id = borrow.bookid and borrow.readerid = reader.id and readerid  = #{param1}
+    </select>
+</mapper>
